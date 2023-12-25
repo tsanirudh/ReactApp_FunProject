@@ -18,6 +18,7 @@ const AddItem = ({
 
   }
   const handleAddItem = () => {
+    console.log("Hello from handleAddItem", csrf);
     axios.post('http://localhost:8000/api/api/items/', { foo: itemName },  {
         //set the csrf token in the header
         headers: {
