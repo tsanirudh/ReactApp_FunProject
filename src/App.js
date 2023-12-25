@@ -1,25 +1,33 @@
-import logo from './logo.svg';
+import React, { useEffect, useState } from 'react';
 import './App.css';
+import ItemList from './components/ItemList';
+import AddItem from './components/addItem';
+import Routes from './components/routes/routes';
+import axios from 'axios';
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    const [csrfToken, setCsrfToken] = useState('');
+
+    useEffect(() => {
+        const fetchCsrfToken = async () => {
+            try {
+                const response = await axios.get('http://localhost:8000/api/api/items/');
+                const csrf = response.data.credentials.csrf;
+                setCsrfToken(csrf);
+                console.log('csrf', csrf);
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        };
+
+        fetchCsrfToken();
+    }, []);
+
+    return (
+        <div className="App">
+            <Routes csrf={csrfToken} />
+        </div>
+    );
 }
 
 export default App;
